@@ -27,8 +27,8 @@ define(function(require) {
             /* CSS FOR AZURE PLAYER <link rel="stylesheet" href="//amp.azure.net/libs/amp/1.8.3/skins/amp-default/azuremediaplayer.min.css"> */
             /* JAVASCRIPT FOR AZURE PLAYER <script src="//amp.azure.net/libs/amp/1.8.3/azuremediaplayer.min.js"></script>*/
 
-            if (window.onYouTubeIframeAPIReady === undefined) {
-                window.onYouTubeIframeAPIReady = function() {
+            if (window.onAzureIframeAPIReady === undefined) {
+                window.onAzureIframeAPIReady = function() {
                     Adapt.azureAPIReady = true;
                     Adapt.trigger('azureAPIReady');
                 };
@@ -55,9 +55,9 @@ define(function(require) {
         postRender: function() {
 
             if (Adapt.azureAPIReady === true) {
-                this.onYouTubeIframeAPIReady();
+                this.onAzureIframeAPIReady();
             } else {
-                Adapt.once('azureAPIReady', this.onYouTubeIframeAPIReady, this)
+                Adapt.once('azureAPIReady', this.onAzureIframeAPIReady, this)
             }
         },
 
@@ -169,7 +169,7 @@ define(function(require) {
             }
         },
 
-        onYouTubeIframeAPIReady: function() {
+        onAzureIframeAPIReady: function() {
 
             this.isPlaying = false;
             
