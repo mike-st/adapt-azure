@@ -19,9 +19,11 @@ define(function(require) {
         events: function() {
             return Adapt.device.touch == true ? {
                 'inview': 'onEnded',
+                'inview': 'trackplayAMP',
                 'click .azure-inline-transcript-button': 'onToggleInlineTranscript'
             } : {
                 'mousemove': 'onEnded',
+                'mousemove': 'trackplayAMP',
                 'click .azure-inline-transcript-button': 'onToggleInlineTranscript'
             }
         },
@@ -41,8 +43,9 @@ define(function(require) {
         },
 
         preRender: function() {
-            this.listenTo(Adapt, 'device:resize', this.setIFrameSize);
-            this.listenTo(Adapt, 'device:changed', this.setIFrameSize);
+            this.listenTo(Adapt, {
+              'device:resize device:changed': this.setIFrameSize
+            });
         },
 
         setIFrameSize: function () {
@@ -153,6 +156,14 @@ define(function(require) {
                 } else {
                     setTimeout(checkForChanges, 500);
                 }
+            }
+        },
+        
+        trackplayAMP: function() {
+            var currentazureon = this.model.get('_id');
+            //Trigger PAUSE button from outside the iframe
+            if ( $('.' + currentazureon + ' .removeazureie').hasClass('vjs-playing') ) {
+                $('iframe:not(#' + currentazureon + ').vjs-playing:not(.vjs-paused)').contents().find(".vjs-play-control.vjs-control.vjs-button.vjs-playing:not(.vjs-paused)").trigger("click");
             }
         },
         
