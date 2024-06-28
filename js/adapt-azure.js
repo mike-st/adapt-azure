@@ -168,7 +168,8 @@ define(function(require) {
         trackplayAMP: function() {
             var currentazureon = this.model.get('_id');
             //Trigger PAUSE button from outside the iframe
-            if ( $('.' + currentazureon + ' .removeazureie').hasClass('vjs-playing') ) {
+            if ( $('iframe[name="azuremediaplayer-' + currentazureon + '"]').hasClass('vjs-playing') ) {
+                $('div[data-adapt-id="' + currentazureon + '"] .audio-controls .audio-toggle.audio-pause:not(.audio-play)').trigger("click"); //stop current audio
                 $('iframe:not(#' + currentazureon + ').vjs-playing:not(.vjs-paused)').contents().find(".vjs-play-control.vjs-control.vjs-button.vjs-playing:not(.vjs-paused)").trigger("click");
             }
         },
