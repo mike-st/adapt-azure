@@ -18,8 +18,8 @@ define(function(require) {
         
         events: function() {
             return Adapt.device.touch == true ? {
-                'inview': 'onEnded',
-                'inview': 'trackplayAMP',
+                'touchmove': 'onEnded',
+                'touchmove': 'trackplayAMP',
                 'click .azure-inline-transcript-button': 'onToggleInlineTranscript'
             } : {
                 'mousemove': 'onEnded',
@@ -124,8 +124,14 @@ define(function(require) {
                 }
 
                 if (this._isVisibleTop && this._isVisibleBottom) {
-                    if ( $('.' + currentazureon + ' .azureplaymode').hasClass('vjs-has-started') ) {
-                        this.setCompletionStatus();
+                    $(checkForChanges1);
+                }
+                var self = this;
+                function checkForChanges1() {
+                    if ($('.' + currentazureon + ' .azureplaymode').hasClass('vjs-has-started')) {
+                        self.setCompletionStatus();
+                    } else {
+                        setTimeout(checkForChanges1, 500);
                     }
                 }
             }
@@ -146,15 +152,15 @@ define(function(require) {
                 }
 
                 if (this._isVisibleTop && this._isVisibleBottom) {
-                    $(checkForChanges);
+                    $(checkForChanges2);
                 }
             }
             var self = this;
-            function checkForChanges() {
+            function checkForChanges2() {
                 if ($('.' + currentazureon + ' .azureendmode').hasClass('vjs-ended')) {
                     self.setCompletionStatus();
                 } else {
-                    setTimeout(checkForChanges, 500);
+                    setTimeout(checkForChanges2, 500);
                 }
             }
         },
