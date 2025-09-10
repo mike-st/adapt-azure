@@ -32,6 +32,10 @@ define(function(require) {
             ComponentView.prototype.initialize.apply(this);
 
             _.bindAll(this, 'onInview', 'onPlay', 'onEnded' );
+            Adapt.on("azureVideoComplete", () => {
+                console.log("[Azure] Received completion signal from iframe.");
+                this.setCompletionStatus();  // â¬…ï¸ This marks the video complete reliably
+            });
 
             /*if (window.onAzureIframeAPIReady === undefined) {
                 window.onAzureIframeAPIReady = function() {
@@ -70,6 +74,12 @@ define(function(require) {
         },
 
         setIFrameSize: function () {
+            //IF MOBILE ADD THE CLASS
+            if ($('html').hasClass('touch')) {
+                $('iframe').addClass("vjs-touch-enabled");
+            } else {
+                //DO NOTHING
+            }
             this.$('.azuremediaplayer').width(this.$('.azure-widget').width());
             this.$('iframe').width(this.$('.azure-widget').width());
             
@@ -130,7 +140,8 @@ define(function(require) {
                 }
             }
         },
-        
+
+        //Will not track properly if using same video source
         onPlay: function(event, visible, visiblePartX, visiblePartY) {
             var currentazureon = this.model.get('_id');
             $('.' + currentazureon + ' .removeazureie').addClass('azureplaymode');
@@ -157,7 +168,8 @@ define(function(require) {
                 }
             }
         },
-        
+
+        //Will not track properly if using same video source
         onEnded: function(event, visible, visiblePartX, visiblePartY) {
             var currentazureon = this.model.get('_id');
             $('.' + currentazureon + ' .removeazureie').addClass('azureendmode');
@@ -183,15 +195,6 @@ define(function(require) {
                 } else {
                     setTimeout(checkForChanges2, 500);
                 }
-            }
-        },
-        
-        trackplayAMP: function() {
-            var currentazureon = this.model.get('_id');
-            //Trigger PAUSE button from outside the iframe
-            if ( $('iframe[name="azuremediaplayer-' + currentazureon + '"]').hasClass('vjs-playing') ) {
-                $('div[data-adapt-id="' + currentazureon + '"] .audio-controls .audio-toggle.audio-pause:not(.audio-play)').trigger("click"); //stop current audio
-                $('iframe:not(#' + currentazureon + ').vjs-playing:not(.vjs-paused)').contents().find(".vjs-play-control.vjs-control.vjs-button.vjs-playing:not(.vjs-paused)").trigger("click");
             }
         },
         
